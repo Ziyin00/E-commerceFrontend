@@ -1,28 +1,34 @@
 import { IoMdSearch } from "react-icons/io";
 import { FaCaretDown, FaShoppingCart } from "react-icons/fa";
 import DarkMode from "./DarkMode";
+import { useState } from "react";
 
-const Navbar = ({ handleOrderPopup }) => {
+const Navbar = ({
+  products,
+  handleOrderPopup,
+  setSearchResults,
+  setSearchQuery,
+}) => {
   const MenuLinks = [
     {
       id: 1,
       name: "Home",
-      link: "/#",
+      link: "/src/components/Hero",
     },
     {
       id: 2,
       name: "Shop",
-      link: "/#shop",
+      link: "/src/components/Category",
     },
     {
       id: 3,
       name: "About",
-      link: "/#about",
+      link: "/src/components/Product",
     },
     {
       id: 4,
       name: "Blogs",
-      link: "/#blog",
+      link: "/src/components/Blog",
     },
   ];
   const DropdownLinks = [
@@ -42,6 +48,17 @@ const Navbar = ({ handleOrderPopup }) => {
       links: "/#",
     },
   ];
+
+  const [input, setInput] = useState("");
+
+  const handleChange = (value) => {
+    setInput(value);
+    setSearchQuery(value);
+    const filteredProducts = products.filter((product) =>
+      product.title.toLowerCase().includes(value.toLowerCase())
+    );
+    setSearchResults(filteredProducts);
+  };
   return (
     <div className="relative z-40 duration-200 bg-white dark:bg-gray-900 dark:text-white">
       <div className="py-4">
@@ -96,7 +113,12 @@ const Navbar = ({ handleOrderPopup }) => {
           </div>
           <div className="flex items-center justify-between gap-4">
             <div className="relative hidden group sm:block">
-              <input type="text" placeholder="Search" className=" search-bar" />
+              <input
+                type="text"
+                placeholder="Search"
+                className=" search-bar"
+                onChange={(e) => handleChange(e.target.value)}
+              />
               <IoMdSearch className="absolute text-xl text-gray-600 duration-200 -translate-y-1/2 cursor-pointer dark:text-gray-400 top-1/2 right-3 group-hover:text-primary" />
             </div>
             <button className="relative p-3" onClick={handleOrderPopup}>
